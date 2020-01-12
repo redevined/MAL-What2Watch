@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Settings</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list>
+    <ion-item>
+      <ion-label floating>MyAnimeList username</ion-label>
+      <ion-input type="text" [(ngModel)]="config.username"></ion-input>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+
+<ion-footer padding no-shadow>
+  <ion-toolbar>
+    <button ion-button block (click)="config.save()">Save</button>
+  </ion-toolbar>
+</ion-footer>
