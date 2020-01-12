@@ -6,22 +6,22 @@ const KEY_USERNAME : string = 'username';
 @Injectable()
 export class ConfigService {
   public username : string;
+  public ready : Promise<any>;
 
-  constructor(public storage : Storage) {
-    this.load();
+  constructor(private storage : Storage) {
+    this.username = '';
+    this.ready = this.load();
   }
 
-  load() {
+  load() : Promise<any> {
     return this.storage.get(KEY_USERNAME).then(data => {
       if (data) {
         this.username = data;
-      } else {
-        this.username = '';
       }
     });
   }
 
-  save() {
+  save() : Promise<any> {
     return this.storage.set(KEY_USERNAME, this.username);
   }
 }

@@ -9,10 +9,12 @@ import { ListPage } from '../pages/list/list';
 import { SettingsPage } from '../pages/settings/settings';
 
 import { ConfigService } from '../services/config/config';
+import { MALService } from '../services/mal/mal';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { IonicStorageModule } from '@ionic/storage';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,8 @@ import { IonicStorageModule } from '@ionic/storage';
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -37,6 +40,7 @@ import { IonicStorageModule } from '@ionic/storage';
   ],
   providers: [
     ConfigService,
+    MALService,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
