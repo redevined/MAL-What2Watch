@@ -3,18 +3,24 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>My First List</ion-title>
+    <ion-title>Watch List</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="sync" (click)="sync()"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-      <ion-icon name="{{item.icon}}" item-left></ion-icon>
-      {{item.title}}
-      <div class="item-note" item-right>
-        {{item.note}}
-      </div>
+    <button ion-item *ngFor="let anime of animes" (click)="itemTapped($event, anime)">
+      <ion-thumbnail item-start>
+        <img src="{{anime.image_url}}">
+      </ion-thumbnail>
+      <h2>{{anime.title}}</h2>
+      <p>{{anime.type}}, {{anime.total_episodes}} Episodes, Synced: {{anime.updated}}</p>
     </button>
   </ion-list>
 </ion-content>

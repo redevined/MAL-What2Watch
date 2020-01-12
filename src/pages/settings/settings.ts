@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { ConfigService } from '../../services/config/config';
 
 @Component({
@@ -6,7 +7,5 @@ import { ConfigService } from '../../services/config/config';
   templateUrl: 'settings.html'
 })
 export class SettingsPage {
-  constructor(public config : ConfigService) {
-
-  }
+  constructor(private config : ConfigService) { }
 }
