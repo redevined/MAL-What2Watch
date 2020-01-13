@@ -11,20 +11,14 @@ import { AnimeModel, AnimeListModel } from '../../models/anime/anime';
   templateUrl: 'list.html'
 })
 export class ListPage implements OnInit {
-  animes: AnimeModel[];
-
   constructor(private navCtrl: NavController, private navParams: NavParams, private alert : AlertController, private mal : MALService) { }
 
-  ngOnInit() { // TODO trigger only once
-    this.animes = [];
+  ngOnInit() {
     this.mal.ready.then(() => this.sync());
   }
 
-  sync() : Promise<any> {
-    return this.mal.get().then(animeList => {
-      this.animes = animeList.anime;
-    }).catch(err => {
-
+  sync() {
+    this.mal.update().catch(err => {
       // Redirect to settings
       let msg = err ? 'Given user does not exist.' : 'You did not set your Username yet.';
       msg = msg + '\nPlease visit the Settings page.';

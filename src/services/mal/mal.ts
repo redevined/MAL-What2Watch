@@ -11,7 +11,7 @@ const REQUEST_INTERVAL : number = 4000;
 
 @Injectable()
 export class MALService {
-  private animeList : AnimeListModel;
+  public animeList : AnimeListModel;
   public updating : boolean;
   public ready : Promise<any>;
 
@@ -36,20 +36,11 @@ export class MALService {
     return this.storage.set(KEY_LIST, this.animeList);
   }
 
-  get() : Promise<AnimeListModel> {
-    return this.update();
-  }
-
-  update() : Promise<AnimeListModel> {
+  update() : Promise<void> {
     return new Promise((resolve, reject) => {
       // Check that username is set
       if (!this.config.username) {
         return reject(null);
-      }
-
-      // Resolve with old list
-      if (this.animeList.anime.length > 0) {
-        resolve(this.animeList);
       }
 
       // Check that no other update is currently running
@@ -68,46 +59,59 @@ export class MALService {
       });
 
       // Update anime list
-      p.then(animeList => {
+      p.then(animeList => { // TODO check if then class are chained correctly
+        let updated = false;
         this.animeList.anime = animeList.anime.map(anime => {
           let currentAnime = this.animeList.anime.find(item => item.mal_id == anime.mal_id);
           if (currentAnime) {
             return currentAnime;
+          } else {
+            updated = true;
+            return anime;
           }
-          return anime;
-        })
+        });
+        return updated;
       });
 
-      // Resolve with updated list and save
-      p.then(() => {
-        resolve(this.animeList);
-        this.save();
+      // Save updated list
+      p.then(updated => {
+        if (updated) {
+          this.save();
+        }
+        return updated;
       });
 
       // Update details of list entries
-      p.then(() => {
-        this.animeList.anime.filter(anime => !anime.updated).forEach(anime => {
+      p.then(updated => {
+        if (updated) {
+          //updated = false;
+          this.animeList.anime.filter(anime => !anime.updated).forEach(anime => {
 
-          // Update in itervals to meet API conditions
-          setTimeout(() => {
-            let url = this.buildDetailsUrl(anime.mal_id);
-            this.http.get<AnimeModel>(url).toPromise().then(details => {
-              for (let key in details) {
-                anime[key] = details[key];
-              }
-            }).catch(err => {
-              // ignore
-            });
-          }, REQUEST_INTERVAL);
-          anime.updated = true;
-        });
+            // Update in itervals to meet API conditions
+            setTimeout(() => {
+              let url = this.buildDetailsUrl(anime.mal_id);
+              this.http.get<AnimeModel>(url).toPromise().then(details => {
+                for (let key in details) {
+                  anime[key] = details[key];
+                }
+              }).catch(err => {
+                // ignore
+              });
+            }, REQUEST_INTERVAL);
+            anime.updated = true;
+            //updated = true;
+          });
+        }
+        return updated;
       });
 
       // Resolve with complete list and save
-      p.then(() => {
-        resolve(this.animeList);
-        this.save();
+      p.then(updated => {
+        if (updated) {
+          this.save();
+        }
         this.updating = false;
+        resolve();
       });
     });
   }
