@@ -15,6 +15,12 @@
       <ion-label floating>MyAnimeList Username</ion-label>
       <ion-input type="text" [(ngModel)]="config.username"></ion-input>
     </ion-item>
+    <ion-item>
+      <ion-label>Clear storage</ion-label>
+      <button ion-button icon-only item-end default color="danger" (click)="clear()">
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-item>
   </ion-list>
 
 </ion-content>

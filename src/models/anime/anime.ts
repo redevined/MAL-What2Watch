@@ -19,5 +19,5 @@ export interface AnimeModel {
   studios? : { mal_id : number, name : string }[];
   genres? : { mal_id : number, name : string }[];
 
-  updated? : boolean;
+  synced? : boolean;
 }

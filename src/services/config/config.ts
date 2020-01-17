@@ -24,4 +24,9 @@ export class ConfigService {
   save() : Promise<any> {
     return this.storage.set(KEY_USERNAME, this.username);
   }
+
+  clear() : Promise<void> {
+    this.username = '';
+    return this.storage.clear();
+  }
 }
