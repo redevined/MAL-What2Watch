@@ -6,8 +6,11 @@
     <ion-title>Watch List</ion-title>
 
     <ion-buttons end>
+      <button ion-button icon-only (click)="openFilterSort()">
+        <ion-icon name="funnel" [ngClass]=""></ion-icon>
+      </button>
       <button ion-button icon-only (click)="sync()">
-        <ion-icon name="sync" [ngClass]="{'loading' : mal.updating}"></ion-icon> <!-- TODO animate while syncing -->
+        <ion-icon name="sync" [ngClass]="{'loading' : mal.updating}"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -15,7 +18,7 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let anime of mal.animeList.anime" (click)="itemTapped($event, anime)">
+    <button ion-item *ngFor="let anime of applyFilterSort(mal.animeList.anime)" (click)="openDetails(anime)">
       <ion-thumbnail item-start>
         <img src="{{anime.image_url}}">
       </ion-thumbnail>

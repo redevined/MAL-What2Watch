@@ -3,13 +3,14 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 
-import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
-import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { ListPage } from '../pages/list/list';
+import { FilterSortPage } from '../pages/filter-sort/filter-sort';
+import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { SettingsPage } from '../pages/settings/settings';
 
-import { ConfigService } from '../services/config/config';
 import { MALService } from '../services/mal/mal';
+import { FilterSortService } from '../services/filter-sort/filter-sort';
+import { ConfigService } from '../services/config/config';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -19,9 +20,9 @@ import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   declarations: [
     MyApp,
-    HelloIonicPage,
-    ItemDetailsPage,
     ListPage,
+    FilterSortPage,
+    ItemDetailsPage,
     SettingsPage
   ],
   imports: [
@@ -33,14 +34,15 @@ import { HttpClientModule } from '@angular/common/http';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HelloIonicPage,
-    ItemDetailsPage,
     ListPage,
+    FilterSortPage,
+    ItemDetailsPage,
     SettingsPage
   ],
   providers: [
-    ConfigService,
     MALService,
+    FilterSortService,
+    ConfigService,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

@@ -11,7 +11,13 @@ import { AnimeModel, AnimeListModel } from '../../models/anime/anime';
   templateUrl: 'list.html'
 })
 export class ListPage implements OnInit {
-  constructor(private navCtrl: NavController, private navParams: NavParams, private alert : AlertController, private mal : MALService) { }
+  private sorter : (animes : AnimeModel[]) => AnimeModel[];
+  private filter : (animes : AnimeModel[]) => AnimeModel[];
+
+  constructor(private navCtrl: NavController, private navParams: NavParams, private alert : AlertController, private mal : MALService) {
+    this.sorter = x => x;
+    this.filter = x => x;
+  }
 
   ngOnInit() {
     this.mal.ready.then(() => this.sync());
@@ -35,7 +41,13 @@ export class ListPage implements OnInit {
     });
   }
 
-  itemTapped(event, item) {
+  applyFilterSort(animes : AnimeModel[]) : AnimeModel[] {
+    return this.sorter(this.filter(animes));
+  }
+
+  openFilterSort() {}
+
+  openDetails(anime : AnimeModel) {
     // this.navCtrl.push(ItemDetailsPage, {
     //   item: item
     // });
