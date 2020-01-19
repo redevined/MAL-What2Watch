@@ -16,8 +16,8 @@
     <ion-item>
       <ion-label>Order</ion-label>
       <ion-select [(ngModel)]="filterSort.sortAscending" interface="action-sheet">
-        <ion-option value="true">Ascending</ion-option>
-        <ion-option value="false">Descending</ion-option>
+        <ion-option [value]="true">Ascending</ion-option>
+        <ion-option [value]="false">Descending</ion-option>
       </ion-select>
     </ion-item>
     <ion-item-divider color="light">Filter</ion-item-divider>

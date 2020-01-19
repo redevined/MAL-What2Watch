@@ -4,6 +4,7 @@ import { AnimeModel } from '../../models/anime/anime';
 
 @Injectable()
 export class FilterSortService {
+  public active : boolean;
   public sortKey : string;
   public sortAscending : boolean;
   public filterCrit : AnimeModel;
@@ -13,6 +14,7 @@ export class FilterSortService {
   }
 
   reset() : void {
+    this.active = false;
     this.sortKey = 'title';
     this.sortAscending = true;
     this.filterCrit = {
@@ -32,7 +34,8 @@ export class FilterSortService {
   }
 
   sort(animes : AnimeModel[]) : AnimeModel[] {
-    return animes.sort((a, b) => {
+    animes = animes.filter(anime => anime[this.sortKey] == undefined);
+    animes = animes.sort((a, b) => {
       if (a[this.sortKey] < b[this.sortKey]) { // TODO if sortKey is premiered then convert to date
         return this.sortAscending ? -1 : 1;
       } else if (a[this.sortKey] > b[this.sortKey]) {
@@ -41,5 +44,6 @@ export class FilterSortService {
         return 0;
       }
     });
+    return animes;
   }
 }

@@ -6,13 +6,15 @@ import { ItemDetailsPage } from '../item-details/item-details';
 import { SettingsPage } from '../settings/settings';
 import { MALService } from '../../services/mal/mal';
 import { FilterSortService } from '../../services/filter-sort/filter-sort';
-import { AnimeModel } from '../../models/anime/anime';
+import { AnimeModel, keyNameMap } from '../../models/anime/anime';
 
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html'
 })
 export class ListPage implements OnInit {
+  private keyNameMap : any = keyNameMap;
+
   constructor(private navCtrl: NavController, private navParams: NavParams, private alert : AlertController,
               private mal : MALService, private filterSort : FilterSortService) { }
 
