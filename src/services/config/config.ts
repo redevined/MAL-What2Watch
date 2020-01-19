@@ -4,7 +4,7 @@ import { Storage } from '@ionic/storage';
 const KEY_USERNAME : string = 'username';
 
 @Injectable()
-export class ConfigService {
+export class ConfigService { // TODO remove
   public username : string;
   public ready : Promise<any>;
 
@@ -25,7 +25,7 @@ export class ConfigService {
     return this.storage.set(KEY_USERNAME, this.username);
   }
 
-  clear() : Promise<void> {
+  reset() : Promise<void> {
     this.username = '';
     return this.storage.clear();
   }

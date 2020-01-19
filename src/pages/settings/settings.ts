@@ -8,10 +8,9 @@ import { MALService } from '../../services/mal/mal';
   templateUrl: 'settings.html'
 })
 export class SettingsPage {
-  constructor(private config : ConfigService, private mal : MALService) { }
+  constructor(private mal : MALService) { }
 
   clear() : void {
-    this.config.clear();
-    this.mal.reset();
+    this.mal.reset(); // TODO confirm dialog
   }
 }

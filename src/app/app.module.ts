@@ -10,7 +10,6 @@ import { SettingsPage } from '../pages/settings/settings';
 
 import { MALService } from '../services/mal/mal';
 import { FilterSortService } from '../services/filter-sort/filter-sort';
-import { ConfigService } from '../services/config/config';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -42,7 +41,6 @@ import { HttpClientModule } from '@angular/common/http';
   providers: [
     MALService,
     FilterSortService,
-    ConfigService,
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

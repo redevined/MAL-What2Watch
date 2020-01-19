@@ -5,44 +5,57 @@ import { Storage } from '@ionic/storage';
 import { ConfigService } from '../config/config';
 import { AnimeModel, AnimeListModel } from '../../models/anime/anime';
 
-const KEY_LIST = 'anime-list';
+const KEY_USERNAME : string = 'username';
+const KEY_LIST : string = 'anime-list';
 const BASE_URL : string = 'https://api.jikan.moe/v3';
 const REQUEST_INTERVAL : number = 4000;
 
 @Injectable()
 export class MALService {
+  public username : string;
   public animes : AnimeModel[];
   public updating : boolean;
   public ready : Promise<any>;
 
-  constructor(private config : ConfigService, private http : HttpClient, private storage : Storage) {
-    this.reset();
-    // MALService is ready if has loaded and ConfigService is ready
-    this.ready = this.load().then(() => this.config.ready);
+  constructor(private http : HttpClient, private storage : Storage) {
+    this.init();
+    this.ready = this.load();
   }
 
-  reset() : void {
+  init() : void {
+    this.username = '';
     this.animes = [];
     this.updating = false;
   }
 
-  load() : Promise<AnimeModel[]> {
-    return this.storage.get(KEY_LIST).then<AnimeModel[]>(animes => {
-      if (animes) {
-        this.animes = animes;
-      }
-      return animes;
-    });
+  reset() : Promise<void> {
+    this.init();
+    return this.storage.clear();
   }
 
-  save() : Promise<any> {
+  async load() : Promise<void> {
+    let username = await this.storage.get(KEY_USERNAME);
+    if (username) {
+      this.username = username;
+    }
+    let animes = await this.storage.get(KEY_LIST);
+    if (animes) {
+      this.animes = animes;
+    }
+  }
+
+  saveUsername() : Promise<any> {
+    return this.storage.set(KEY_USERNAME, this.username);
+  }
+
+  saveAnimes() : Promise<any> {
     return this.storage.set(KEY_LIST, this.animes);
   }
 
-  update() : Promise<void> {
+  update() : Promise<void> { // TODO async/await
     return new Promise((resolve, reject) => {
       // Check that username is set
-      if (!this.config.username) {
+      if (!this.username) {
         return reject(null);
       }
 
@@ -53,13 +66,13 @@ export class MALService {
       this.updating = true;
 
       let finishUpdate = () => {
-        this.save();
+        this.saveAnimes();
         this.updating = false;
         resolve();
       };
 
       // Fetch Plan To Watch list from MAL
-      let url = this.buildListUrl(this.config.username);
+      let url = this.buildListUrl(this.username);
       let p = this.http.get<AnimeListModel>(url).toPromise();
 
       // Update anime list
@@ -97,7 +110,7 @@ export class MALService {
             }
 
             anime.synced = true;
-            this.save();
+            this.saveAnimes();
           }).catch(err => {
             console.log(err);
           });

@@ -23,7 +23,7 @@ export class FilterSortPage {
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private filterSort : FilterSortService) { }
 
-  apply() : void {
+  apply() : void { // TODO trigger list template refresh
     this.navCtrl.pop();
   }
 }
