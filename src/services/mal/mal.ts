@@ -52,75 +52,79 @@ export class MALService {
     return this.storage.set(KEY_LIST, this.animes);
   }
 
-  update() : Promise<void> { // TODO async/await
-    return new Promise((resolve, reject) => {
-      // Check that username is set
-      if (!this.username) {
-        return reject(null);
+  async update() : Promise<void> {
+    // Check that username is set and no other update is currently running
+    if (!this.username) {
+      throw new Error('No MAL username set.');
+    } else if (this.updating) {
+      return;
+    }
+    this.updating = true;
+
+    // Cleanup function
+    let finishUpdate = () => {
+      this.saveAnimes();
+      this.updating = false;
+    };
+
+    // Fetch Plan To Watch list from MAL
+    let animes : AnimeModel[];
+    try {
+      let url = this.buildListUrl(this.username);
+      let animeList = await this.http.get<AnimeListModel>(url).toPromise();
+      animes = animeList.anime;
+    } catch (err) {
+      console.error(err);
+      finishUpdate();
+      throw new Error('The specified user does not exist.');
+    }
+
+    // Update anime list
+    this.animes = animes.map(anime => {
+      let currentAnime = this.animes.find(item => item.mal_id == anime.mal_id);
+      if (currentAnime) {
+        return currentAnime;
+      } else {
+        anime.synced = false;
+        return anime;
+      }
+    });
+
+    // Identify list entries without details
+    let queue = this.animes.filter(anime => !anime.synced);
+    if (!queue.length) {
+      return finishUpdate();
+    }
+
+    // Fetch details in intervals to meet API conditions
+    let task = setInterval(async () => {
+
+      // Get next anime in queue
+      let anime = queue.shift();
+      if (!anime) {
+        clearInterval(task);
+        return finishUpdate();
       }
 
-      // Check that no other update is currently running
-      if (this.updating) {
+      try {
+        // Get details and copy them
+        let url = this.buildDetailsUrl(anime.mal_id);
+        let details = await this.http.get<AnimeModel>(url).toPromise();
+        for (let key in details) {
+          anime[key] = details[key];
+        }
+      } catch (err) {
+        // Handle error and reappend anime to queue
+        console.error(err);
+        queue.push(anime);
         return;
       }
-      this.updating = true;
+      
+      // Set synced flag
+      anime.synced = true;
+      this.saveAnimes();
 
-      let finishUpdate = () => {
-        this.saveAnimes();
-        this.updating = false;
-        resolve();
-      };
-
-      // Fetch Plan To Watch list from MAL
-      let url = this.buildListUrl(this.username);
-      let p = this.http.get<AnimeListModel>(url).toPromise();
-
-      // Update anime list
-      p.then(animeList => {
-        this.animes = animeList.anime.map(anime => {
-          let currentAnime = this.animes.find(item => item.mal_id == anime.mal_id);
-          if (currentAnime) {
-            return currentAnime;
-          } else {
-            anime.synced = false;
-            return anime;
-          }
-        });
-
-        // Update details of list entries
-      }).then(() => {
-        let animeToSync = this.animes.filter(anime => !anime.synced);
-        if (!animeToSync.length) {
-          return finishUpdate();
-        }
-
-        // Update in intervals to meet API conditions
-        let task = setInterval(() => {
-          let anime = animeToSync.shift();
-          if (!anime) {
-            // Save updates
-            clearInterval(task);
-            return finishUpdate();
-          }
-
-          let url = this.buildDetailsUrl(anime.mal_id);
-          this.http.get<AnimeModel>(url).toPromise().then(details => {
-            for (let key in details) {
-              anime[key] = details[key];
-            }
-
-            anime.synced = true;
-            this.saveAnimes();
-          }).catch(err => {
-            console.log(err);
-          });
-        }, REQUEST_INTERVAL);
-
-        // Handle error
-      }).catch(err => {
-        reject(err);
-      });
-    });
+    }, REQUEST_INTERVAL);
   }
 
   buildListUrl(username : string) : string {

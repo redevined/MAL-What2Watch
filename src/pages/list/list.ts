@@ -20,14 +20,12 @@ export class ListPage implements OnInit {
     this.mal.ready.then(() => this.sync());
   }
 
-  sync() {
+  sync() : void {
     this.mal.update().catch(err => {
       // Redirect to settings
-      let msg = err ? 'Given user does not exist.' : 'You did not set your Username yet.';
-      msg = msg + '\nPlease visit the Settings page.';
       this.alert.create({
         title: 'Warning',
-        subTitle: msg,
+        subTitle: err.message + '\nPlease visit the Settings page.',
         buttons: [{
           text: 'OK',
           handler: data => {
