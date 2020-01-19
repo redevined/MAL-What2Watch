@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { AnimeModel, AnimeListModel } from '../../models/anime/anime';
+import { AnimeModel } from '../../models/anime/anime';
 
 @Injectable()
 export class FilterSortService {

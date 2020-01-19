@@ -6,7 +6,7 @@ import { ItemDetailsPage } from '../item-details/item-details';
 import { SettingsPage } from '../settings/settings';
 import { MALService } from '../../services/mal/mal';
 import { FilterSortService } from '../../services/filter-sort/filter-sort';
-import { AnimeModel, AnimeListModel } from '../../models/anime/anime';
+import { AnimeModel } from '../../models/anime/anime';
 
 @Component({
   selector: 'page-list',

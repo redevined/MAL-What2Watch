@@ -10,14 +10,7 @@
     <ion-item>
       <ion-label>Sort by</ion-label>
       <ion-select [(ngModel)]="filterSort.sortKey" interface="action-sheet">
-        <ion-option value="title">Title</ion-option>
-        <ion-option value="type">Type</ion-option>
-        <ion-option value="total_episodes">Number of episodes</ion-option>
-        <ion-option value="score">Average score</ion-option>
-        <ion-option value="rank">Rank</ion-option>
-        <ion-option value="popularity">Popularity</ion-option>
-        <ion-option value="source">Source material</ion-option>
-        <ion-option value="premiered">Premiere date</ion-option>
+        <ion-option *ngFor="let key of sortKeys" [value]="key">{{ keyNameMap[key] }}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>

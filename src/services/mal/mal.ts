@@ -11,7 +11,7 @@ const REQUEST_INTERVAL : number = 4000;
 
 @Injectable()
 export class MALService {
-  public animeList : AnimeListModel;
+  public animes : AnimeModel[];
   public updating : boolean;
   public ready : Promise<any>;
 
@@ -22,21 +22,21 @@ export class MALService {
   }
 
   reset() : void {
-    this.animeList = { anime: [] };
+    this.animes = [];
     this.updating = false;
   }
 
-  load() : Promise<any> {
-    return this.storage.get(KEY_LIST).then<AnimeListModel>(animeList => {
-      if (animeList) {
-        this.animeList = animeList;
+  load() : Promise<AnimeModel[]> {
+    return this.storage.get(KEY_LIST).then<AnimeModel[]>(animes => {
+      if (animes) {
+        this.animes = animes;
       }
-      return animeList;
+      return animes;
     });
   }
 
   save() : Promise<any> {
-    return this.storage.set(KEY_LIST, this.animeList);
+    return this.storage.set(KEY_LIST, this.animes);
   }
 
   update() : Promise<void> {
@@ -64,8 +64,8 @@ export class MALService {
 
       // Update anime list
       p.then(animeList => {
-        this.animeList.anime = animeList.anime.map(anime => {
-          let currentAnime = this.animeList.anime.find(item => item.mal_id == anime.mal_id);
+        this.animes = animeList.anime.map(anime => {
+          let currentAnime = this.animes.find(item => item.mal_id == anime.mal_id);
           if (currentAnime) {
             return currentAnime;
           } else {
@@ -76,7 +76,7 @@ export class MALService {
 
         // Update details of list entries
       }).then(() => {
-        let animeToSync = this.animeList.anime.filter(anime => !anime.synced);
+        let animeToSync = this.animes.filter(anime => !anime.synced);
         if (!animeToSync.length) {
           return finishUpdate();
         }
