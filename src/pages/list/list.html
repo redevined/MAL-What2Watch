@@ -18,7 +18,7 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let anime of applyFilterSort(mal.animeList.anime)" (click)="openDetails(anime)">
+    <button ion-item *ngFor="let anime of filterSort.apply(mal.animeList.anime)" (click)="openDetails(anime)">
       <ion-thumbnail item-start>
         <img src="{{anime.image_url}}">
       </ion-thumbnail>

@@ -3,12 +3,12 @@ export interface AnimeListModel {
 }
 
 export interface AnimeModel {
-  mal_id : number;
-  title : string;
-  url : string;
-  image_url : string;
-  type : string;
-  total_episodes : number;
+  mal_id? : number;
+  title? : string;
+  url? : string;
+  image_url? : string;
+  type? : string;
+  total_episodes? : number;
 
   status? : string;
   score? : number;

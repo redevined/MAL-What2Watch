@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, NavParams, AlertController } from 'ionic-angular';
 
+import { FilterSortPage } from '../filter-sort/filter-sort';
 import { ItemDetailsPage } from '../item-details/item-details';
 import { SettingsPage } from '../settings/settings';
 import { MALService } from '../../services/mal/mal';
+import { FilterSortService } from '../../services/filter-sort/filter-sort';
 import { AnimeModel, AnimeListModel } from '../../models/anime/anime';
 
 @Component({
@@ -11,13 +13,8 @@ import { AnimeModel, AnimeListModel } from '../../models/anime/anime';
   templateUrl: 'list.html'
 })
 export class ListPage implements OnInit {
-  private sorter : (animes : AnimeModel[]) => AnimeModel[];
-  private filter : (animes : AnimeModel[]) => AnimeModel[];
-
-  constructor(private navCtrl: NavController, private navParams: NavParams, private alert : AlertController, private mal : MALService) {
-    this.sorter = x => x;
-    this.filter = x => x;
-  }
+  constructor(private navCtrl: NavController, private navParams: NavParams, private alert : AlertController,
+              private mal : MALService, private filterSort : FilterSortService) { }
 
   ngOnInit() {
     this.mal.ready.then(() => this.sync());
@@ -41,11 +38,9 @@ export class ListPage implements OnInit {
     });
   }
 
-  applyFilterSort(animes : AnimeModel[]) : AnimeModel[] {
-    return this.sorter(this.filter(animes));
+  openFilterSort() {
+    this.navCtrl.push(FilterSortPage);
   }
-
-  openFilterSort() {}
 
   openDetails(anime : AnimeModel) {
     // this.navCtrl.push(ItemDetailsPage, {

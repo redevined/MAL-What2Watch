@@ -1,12 +1,87 @@
 <ion-header>
   <ion-navbar>
-    <button menuToggle *ngIf="!selectedItem">
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-title>Sort and Filter</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-list>
+    <ion-item-divider color="light">Sort</ion-item-divider>
+    <ion-item>
+      <ion-label>Sort by</ion-label>
+      <ion-select [(ngModel)]="filterSort.sortKey" interface="action-sheet">
+        <ion-option value="title">Title</ion-option>
+        <ion-option value="type">Type</ion-option>
+        <ion-option value="total_episodes">Number of episodes</ion-option>
+        <ion-option value="score">Average score</ion-option>
+        <ion-option value="rank">Rank</ion-option>
+        <ion-option value="popularity">Popularity</ion-option>
+        <ion-option value="source">Source material</ion-option>
+        <ion-option value="premiered">Premiere date</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Order</ion-label>
+      <ion-select [(ngModel)]="filterSort.sortAscending" interface="action-sheet">
+        <ion-option value="true">Ascending</ion-option>
+        <ion-option value="false">Descending</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item-divider color="light">Filter</ion-item-divider>
+    <ion-item>
+      <ion-label>Title</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.title"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Type</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.type"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Number of episodes</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.total_episodes"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Average score</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.score"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Rank</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.rank"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Popularity</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.popularity"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Source material</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.source"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Premiere date</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.premiered"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Status</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.status"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Studio</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.studios[0].name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Genre</ion-label>
+      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.genres[0].name"></ion-input>
+    </ion-item>
+  </ion-list>
 </ion-content>
+
+<ion-footer padding no-shadow>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col><button ion-button block (click)="apply()">Apply</button></ion-col>
+        <ion-col><button ion-button block (click)="filterSort.reset()" color="danger">Reset</button></ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
