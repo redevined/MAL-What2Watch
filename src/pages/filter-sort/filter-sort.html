@@ -10,7 +10,7 @@
     <ion-item>
       <ion-label>Sort by</ion-label>
       <ion-select [(ngModel)]="filterSort.sortKey" interface="action-sheet">
-        <ion-option *ngFor="let key of sortKeys" [value]="key">{{ keyNameMap[key] }}</ion-option>
+        <ion-option *ngFor="let key of sortKeys" [value]="key">{{ malConstants.getAttributeName(key) }}</ion-option>
       </ion-select>
     </ion-item>
     <ion-item>
@@ -27,7 +27,10 @@
     </ion-item>
     <ion-item>
       <ion-label>Type</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.type"></ion-input>
+      <!-- TODO format all selectors to ion-select -->
+      <ion-select [(ngModel)]="filterSort.filterCrit.type" interface="action-sheet">
+        <ion-option *ngFor="let key of malConstants.type" [value]="key">{{ key }}</ion-option>
+      </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Number of episodes</ion-label>
@@ -73,7 +76,7 @@
     <ion-grid>
       <ion-row>
         <ion-col><button ion-button block (click)="apply()">Apply</button></ion-col>
-        <ion-col><button ion-button block (click)="filterSort.reset()" color="danger">Reset</button></ion-col>
+        <ion-col><button ion-button block (click)="reset()" color="danger">Reset</button></ion-col>
       </ion-row>
     </ion-grid>
   </ion-toolbar>

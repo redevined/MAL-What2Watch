@@ -9,6 +9,7 @@ import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { SettingsPage } from '../pages/settings/settings';
 
 import { MALService } from '../services/mal/mal';
+import { MALConstantsService } from '../services/mal/constants';
 import { FilterSortService } from '../services/filter-sort/filter-sort';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -40,6 +41,7 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [
     MALService,
+    MALConstantsService,
     FilterSortService,
     StatusBar,
     SplashScreen,

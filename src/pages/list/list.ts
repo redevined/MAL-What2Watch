@@ -5,18 +5,17 @@ import { FilterSortPage } from '../filter-sort/filter-sort';
 import { ItemDetailsPage } from '../item-details/item-details';
 import { SettingsPage } from '../settings/settings';
 import { MALService } from '../../services/mal/mal';
+import { MALConstantsService } from '../../services/mal/constants';
 import { FilterSortService } from '../../services/filter-sort/filter-sort';
-import { AnimeModel, keyNameMap } from '../../models/anime/anime';
+import { AnimeModel } from '../../models/anime/anime';
 
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html'
 })
 export class ListPage implements OnInit {
-  private keyNameMap : any = keyNameMap;
-
   constructor(private navCtrl: NavController, private navParams: NavParams, private alert : AlertController,
-              private mal : MALService, private filterSort : FilterSortService) { }
+              private mal : MALService, private malConstants : MALConstantsService, private filterSort : FilterSortService) { }
 
   ngOnInit() {
     this.mal.ready.then(() => this.sync());

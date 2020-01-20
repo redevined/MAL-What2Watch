@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 
 import { ConfigService } from '../config/config';
 import { AnimeModel, AnimeListModel } from '../../models/anime/anime';
+import { MALConstantsService } from './constants';
 
 const KEY_USERNAME : string = 'username';
 const KEY_LIST : string = 'anime-list';
@@ -17,7 +18,7 @@ export class MALService {
   public updating : boolean;
   public ready : Promise<any>;
 
-  constructor(private http : HttpClient, private storage : Storage) {
+  constructor(private http : HttpClient, private storage : Storage, private constants : MALConstantsService) {
     this.init();
     this.ready = this.load();
   }
@@ -27,23 +28,26 @@ export class MALService {
     this.animes = [];
     this.updating = false;
   }
-
-  reset() : Promise<void> {
-    this.init();
-    return this.storage.clear();
-  }
-
+  
   async load() : Promise<void> {
     let username = await this.storage.get(KEY_USERNAME);
     if (username) {
+      console.log('Found stored username ' + username);
       this.username = username;
     }
     let animes = await this.storage.get(KEY_LIST);
     if (animes) {
+      console.log('Found stored ' + animes.length + ' anime');
       this.animes = animes;
     }
   }
-
+  
+  reset() : Promise<void> {
+    console.log('Clearing storage');
+    this.init();
+    return this.storage.clear();
+  }
+  
   saveUsername() : Promise<any> {
     return this.storage.set(KEY_USERNAME, this.username);
   }
@@ -55,16 +59,21 @@ export class MALService {
   async update() : Promise<void> {
     // Check that username is set and no other update is currently running
     if (!this.username) {
+      console.warn('Username is empty');
       throw new Error('No MAL username set.');
     } else if (this.updating) {
+      console.warn('Previous update is still running');
       return;
     }
     this.updating = true;
+    console.log('Starting update');
 
     // Cleanup function
     let finishUpdate = () => {
       this.saveAnimes();
       this.updating = false;
+      this.constants.generate(this.animes);
+      console.log('Update finished');
     };
 
     // Fetch Plan To Watch list from MAL
@@ -74,7 +83,7 @@ export class MALService {
       let animeList = await this.http.get<AnimeListModel>(url).toPromise();
       animes = animeList.anime;
     } catch (err) {
-      console.error(err);
+      console.warn(err);
       finishUpdate();
       throw new Error('The specified user does not exist.');
     }
@@ -92,6 +101,7 @@ export class MALService {
 
     // Identify list entries without details
     let queue = this.animes.filter(anime => !anime.synced);
+    console.log('Found ' + queue.length + ' unsynced entries');
     if (!queue.length) {
       return finishUpdate();
     }
@@ -115,7 +125,7 @@ export class MALService {
         }
       } catch (err) {
         // Handle error and reappend anime to queue
-        console.error(err);
+        console.warn(err);
         queue.push(anime);
         return;
       }

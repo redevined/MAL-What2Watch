@@ -25,7 +25,7 @@ export interface AnimeModel {
   synced? : boolean;
 }
 
-export let keyNameMap = {
+export const ATTR_NAME_MAP = {
   mal_id: 'MAL ID',
   title: 'Title',
   url: 'URL',
@@ -41,4 +41,4 @@ export let keyNameMap = {
   studios: 'Studios',
   genres: 'Genres',
   synced: 'Synchronized details'
-}
+};

@@ -22,9 +22,9 @@
       <ion-thumbnail item-start>
         <img [src]="anime.image_url">
       </ion-thumbnail>
-      <h2>{{anime.title}}</h2>
-      <p>{{anime.type}}, {{keyNameMap['score']}}: {{anime.score || '-'}}</p>
-      <p *ngIf="!['title', 'type', 'score'].includes(filterSort.sortKey)">{{keyNameMap[filterSort.sortKey]}}: {{anime[filterSort.sortKey]}}</p>
+      <h2>{{ anime.title }}</h2>
+      <p>{{ anime.type }}, {{ malConstants.getAttributeName('score')}}: {{ anime.score || '-' }}</p>
+      <p *ngIf="!['title', 'type', 'score'].includes(filterSort.sortKey)">{{ malConstants.getAttributeName(filterSort.sortKey) }}: {{ anime[filterSort.sortKey] }}</p>
       <ion-icon item-end name="warning" color="warn" *ngIf="!anime.synced"></ion-icon>
     </button>
   </ion-list>

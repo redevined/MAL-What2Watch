@@ -34,7 +34,7 @@ export class FilterSortService {
   }
 
   sort(animes : AnimeModel[]) : AnimeModel[] {
-    animes = animes.filter(anime => anime[this.sortKey] == undefined);
+    animes = animes.filter(anime => anime[this.sortKey] != undefined);
     animes = animes.sort((a, b) => {
       if (a[this.sortKey] < b[this.sortKey]) { // TODO if sortKey is premiered then convert to date
         return this.sortAscending ? -1 : 1;
