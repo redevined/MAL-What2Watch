@@ -4,9 +4,10 @@ import { AnimeModel, ATTR_NAME_MAP } from '../../models/anime/anime';
 
 @Injectable()
 export class MALConstantsService {
-  public type : Set<string> = new Set();
+  public type : Set<string> = new Set(); // TODO sorted set? 
   public status : Set<string> = new Set();
   public source : Set<string> = new Set();
+  public premiered : Set<string> = new Set();
   public studioName : Set<string> = new Set();
   public genreName : Set<string> = new Set();
 
@@ -17,6 +18,7 @@ export class MALConstantsService {
       this.type.add(anime.type);
       this.status.add(anime.status);
       this.source.add(anime.source);
+      this.premiered.add(anime.premiered);
       anime.studios.forEach(studio =>
         this.studioName.add(studio.name));
       anime.genres.forEach(genre =>

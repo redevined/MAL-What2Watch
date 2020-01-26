@@ -20,53 +20,23 @@
         <ion-option [value]="false">Descending</ion-option>
       </ion-select>
     </ion-item>
+    
     <ion-item-divider color="light">Filter</ion-item-divider>
     <ion-item>
-      <ion-label>Title</ion-label>
+      <ion-label>{{ malConstants.getAttributeName('title') }}</ion-label>
       <ion-input type="text" [(ngModel)]="filterSort.filterCrit.title"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label>Type</ion-label>
-      <!-- TODO format all selectors to ion-select -->
-      <ion-select [(ngModel)]="filterSort.filterCrit.type" interface="action-sheet">
-        <ion-option *ngFor="let key of malConstants.type" [value]="key">{{ key }}</ion-option>
+
+    <ion-item *ngFor="let attr of ['total_episodes', 'score', 'rank', 'popularity']">
+      <ion-label>{{ malConstants.getAttributeName(attr) }}</ion-label>
+      <ion-range [min]="filterSort.filterCrit[attr].min" [max]="filterSort.filterCrit[attr].max" [step]="filterSort.filterCrit[attr].step" pin="true" dualKnobs="true" [(ngModel)]="filterSort.filterCrit[attr]"></ion-range>
+    </ion-item>
+
+    <ion-item *ngFor="let attr of ['type', 'source', 'premiered', 'status', 'studioName', 'genreName']">
+      <ion-label>{{ malConstants.getAttributeName(attr) }}</ion-label>
+      <ion-select [(ngModel)]="filterSort.filterCrit[attr]" interface="action-sheet">
+        <ion-option *ngFor="let key of malConstants[attr]" [value]="key">{{ key }}</ion-option>
       </ion-select>
-    </ion-item>
-    <ion-item>
-      <ion-label>Number of episodes</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.total_episodes"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Average score</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.score"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Rank</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.rank"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Popularity</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.popularity"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Source material</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.source"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Premiere date</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.premiered"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Status</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.status"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Studio</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.studios[0].name"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Genre</ion-label>
-      <ion-input type="text" [(ngModel)]="filterSort.filterCrit.genres[0].name"></ion-input>
     </ion-item>
   </ion-list>
 </ion-content>

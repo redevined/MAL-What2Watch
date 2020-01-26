@@ -7,7 +7,7 @@ export class FilterSortService {
   public active : boolean;
   public sortKey : string;
   public sortAscending : boolean;
-  public filterCrit : AnimeModel;
+  public filterCrit : FilterCriteria;
 
   constructor() {
     this.reset();
@@ -18,8 +18,18 @@ export class FilterSortService {
     this.sortKey = 'title';
     this.sortAscending = true;
     this.filterCrit = {
-      studios: [{mal_id: -1, name: ''}],
-      genres: [{mal_id: -1, name: ''}]
+      'total_episodes': {
+        'lower': 0, 'upper': 50, 'min': 0, 'max': 50, 'step': 1
+      },
+      'score': {
+        'lower': 0, 'upper': 10, 'min': 0, 'max': 10, 'step': 1
+      },
+      'rank': {
+        'lower': 0, 'upper': 100, 'min': 0, 'max': 100, 'step': 1
+      },
+      'popularity': {
+        'lower': 0, 'upper': 100, 'min': 0, 'max': 100, 'step': 1
+      }
     };
   }
 
@@ -46,4 +56,26 @@ export class FilterSortService {
     });
     return animes;
   }
+}
+
+interface FilterCriteria {
+  title? : string;
+  total_episodes? : Range;
+  score? : Range;
+  rank? : Range;
+  popularity? : Range;
+  type? : string;
+  status? : string;
+  source? : string;
+  premiered? : string;
+  studioName? : string;
+  genreName? : string;
+}
+
+interface Range {
+  lower : number;
+  upper : number;
+  max : number;
+  min : number;
+  step : number;
 }

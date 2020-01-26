@@ -37,8 +37,10 @@ export const ATTR_NAME_MAP = {
   rank: 'Rank',
   popularity: 'Popularity',
   source: 'Source material',
-  premiered: 'Premiere date',
+  premiered: 'Season',
   studios: 'Studios',
+  studioName: 'Studio',
   genres: 'Genres',
+  genreName: 'Genre',
   synced: 'Synchronized details'
 };
